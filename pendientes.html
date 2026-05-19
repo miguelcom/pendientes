@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Pendientes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --card: #1a1a1a;
+    --card2: #222;
+    --flores: #4ade80;
+    --tienda: #60a5fa;
+    --done: #444;
+    --text: #f0f0f0;
+    --muted: #888;
+    --border: #2a2a2a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
+
+  header {
+    padding: 28px 20px 16px;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  .refresh-btn {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+  .refresh-btn:active { transform: scale(0.95); background: #2a2a2a; }
+
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--flores), var(--tienda));
+    transition: width 0.6s ease;
+    width: 0%;
+  }
+
+  .progress-text {
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 8px;
+    padding: 16px 20px 0;
+  }
+
+  .tab {
+    padding: 7px 16px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+
+  .tab.active-flores { background: var(--flores); color: #000; border-color: var(--flores); }
+  .tab.active-tienda { background: var(--tienda); color: #000; border-color: var(--tienda); }
+  .tab.active-all { background: var(--card2); color: var(--text); border-color: #555; }
+
+  .content { padding: 16px 20px; }
+
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 20px 0 10px;
+  }
+
+  .section-label:first-child { margin-top: 4px; }
+
+  .task-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    animation: fadeIn 0.3s ease forwards;
+    opacity: 0;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .task-card:active { transform: scale(0.98); }
+  .task-card.done { background: #141414; border-color: #1e1e1e; }
+
+  .check {
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    border: 1.5px solid #444;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: all 0.2s;
+    margin-top: 1px;
+  }
+
+  .task-card.flores .check { border-color: var(--flores); }
+  .task-card.tienda .check { border-color: var(--tienda); }
+  .task-card.done .check { background: #333; border-color: #333; color: #666; }
+
+  .task-info { flex: 1; min-width: 0; }
+
+  .task-name {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--text);
+    transition: color 0.2s;
+  }
+
+  .task-card.done .task-name {
+    color: #444;
+    text-decoration: line-through;
+  }
+
+  .task-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 5px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-weight: 500;
+  }
+
+  .tag-flores { background: rgba(74,222,128,0.12); color: var(--flores); }
+  .tag-tienda { background: rgba(96,165,250,0.12); color: var(--tienda); }
+  .tag-date { background: rgba(255,200,100,0.1); color: #fbbf24; }
+
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+  }
+
+  .empty-icon { font-size: 40px; margin-bottom: 12px; }
+  .empty-text { font-size: 15px; }
+
+  .loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .spinner {
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--border);
+    border-top-color: var(--tienda);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .status-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    padding: 10px 20px;
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--flores);
+    flex-shrink: 0;
+  }
+
+  .status-dot.loading { background: #fbbf24; animation: pulse 1s infinite; }
+  .status-dot.error { background: #f87171; }
+
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .filter-done {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px 0;
+    font-size: 13px;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .toggle {
+    width: 34px;
+    height: 20px;
+    background: var(--border);
+    border-radius: 99px;
+    position: relative;
+    transition: background 0.2s;
+  }
+
+  .toggle.on { background: var(--tienda); }
+
+  .toggle::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.2s;
+  }
+
+  .toggle.on::after { transform: translateX(14px); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <h1>Pendientes</h1>
+    <button class="refresh-btn" onclick="loadTasks()">
+      ↻ Actualizar
+    </button>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-text" id="progressText">—</span>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active-all" onclick="setTab('all')" id="tab-all">Todo</button>
+  <button class="tab" onclick="setTab('flores')" id="tab-flores">📍 Las Flores</button>
+  <button class="tab" onclick="setTab('tienda')" id="tab-tienda">🏪 La Tienda</button>
+</div>
+
+<div class="filter-done" onclick="toggleDone()">
+  <div class="toggle" id="toggleDone"></div>
+  <span>Mostrar completadas</span>
+</div>
+
+<div class="content" id="content">
+  <div class="loading">
+    <div class="spinner"></div>
+    Cargando tareas...
+  </div>
+</div>
+
+<div class="status-bar">
+  <div class="status-dot" id="statusDot"></div>
+  <span id="statusText">Conectando...</span>
+</div>
+
+<script>
+const SHEET_ID = '1dl8vJlSpLBC5vsdSB48I58bgaV-1g2gNvnELzvO69pw';
+const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+
+let tasks = [];
+let currentTab = 'all';
+let showDone = false;
+
+function setStatus(msg, type = 'ok') {
+  document.getElementById('statusDot').className = 'status-dot ' + (type === 'ok' ? '' : type);
+  document.getElementById('statusText').textContent = msg;
+}
+
+async function loadTasks() {
+  setStatus('Actualizando...', 'loading');
+  try {
+    const res = await fetch(API_URL + '&t=' + Date.now());
+    const text = await res.text();
+    const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1]);
+    const rows = json.table.rows;
+    tasks = rows.map(row => ({
+      id: row.c[0]?.v,
+      name: row.c[1]?.v || '',
+      place: row.c[2]?.v || '',
+      status: row.c[3]?.v || 'Pendiente',
+      date: row.c[4]?.v || '',
+      notes: row.c[5]?.v || ''
+    })).filter(t => t.name);
+    renderTasks();
+    const now = new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+    setStatus(`Actualizado a las ${now}`, 'ok');
+  } catch (e) {
+    setStatus('Error al cargar — verifica que el Sheet es público', 'error');
+    document.getElementById('content').innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">⚠️</div>
+        <div class="empty-text">No se pudo conectar al Sheet.<br>Toca "Actualizar" para reintentar.</div>
+      </div>`;
+  }
+}
+
+function setTab(tab) {
+  currentTab = tab;
+  ['all','flores','tienda'].forEach(t => {
+    const el = document.getElementById('tab-' + t);
+    el.className = 'tab';
+    if (t === tab) {
+      if (t === 'flores') el.classList.add('active-flores');
+      else if (t === 'tienda') el.classList.add('active-tienda');
+      else el.classList.add('active-all');
+    }
+  });
+  renderTasks();
+}
+
+function toggleDone() {
+  showDone = !showDone;
+  document.getElementById('toggleDone').classList.toggle('on', showDone);
+  renderTasks();
+}
+
+function renderTasks() {
+  const total = tasks.length;
+  const done = tasks.filter(t => t.status === 'Completado').length;
+  const pct = total ? Math.round((done / total) * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${done}/${total}`;
+
+  let filtered = tasks;
+  if (currentTab === 'flores') filtered = tasks.filter(t => t.place === 'Las Flores');
+  if (currentTab === 'tienda') filtered = tasks.filter(t => t.place === 'La Tienda');
+  if (!showDone) filtered = filtered.filter(t => t.status !== 'Completado');
+
+  const content = document.getElementById('content');
+
+  if (!filtered.length) {
+    content.innerHTML = `<div class="empty"><div class="empty-icon">${showDone ? '🎉' : '✅'}</div><div class="empty-text">${showDone ? 'No hay tareas' : '¡Todo completado!'}</div></div>`;
+    return;
+  }
+
+  const sections = currentTab === 'all'
+    ? [
+        { label: '📍 Local Las Flores', items: filtered.filter(t => t.place === 'Las Flores') },
+        { label: '🏪 La Tienda', items: filtered.filter(t => t.place === 'La Tienda') }
+      ]
+    : [{ label: '', items: filtered }];
+
+  let html = '';
+  sections.forEach(sec => {
+    if (!sec.items.length) return;
+    if (sec.label) html += `<div class="section-label">${sec.label}</div>`;
+    sec.items.forEach((t, i) => {
+      const isFlores = t.place === 'Las Flores';
+      const isDone = t.status === 'Completado';
+      const delay = i * 40;
+      html += `
+        <div class="task-card ${isFlores ? 'flores' : 'tienda'} ${isDone ? 'done' : ''}"
+             style="animation-delay:${delay}ms"
+             onclick="handleTask(${t.id})">
+          <div class="check">${isDone ? '✓' : ''}</div>
+          <div class="task-info">
+            <div class="task-name">${t.name}</div>
+            <div class="task-meta">
+              ${currentTab === 'all' ? `<span class="tag ${isFlores ? 'tag-flores' : 'tag-tienda'}">${t.place}</span>` : ''}
+              ${t.date ? `<span class="tag tag-date">📅 ${formatDate(t.date)}</span>` : ''}
+              ${t.notes ? `<span style="font-size:11px;color:#666">${t.notes}</span>` : ''}
+            </div>
+          </div>
+        </div>`;
+    });
+  });
+
+  content.innerHTML = html;
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  try {
+    const date = new Date(d);
+    return date.toLocaleDateString('es-PE', { day: 'numeric', month: 'short' });
+  } catch { return d; }
+}
+
+function handleTask(id) {
+  const task = tasks.find(t => t.id === id);
+  if (!task) return;
+  const action = task.status === 'Completado' ? 'reabrir' : 'marcar como completada';
+  alert(`Para ${action} la tarea "${task.name}", díselo a Claude y él actualiza el Sheet. 😊`);
+}
+
+loadTasks();
+setInterval(loadTasks, 60000);
+</script>
+</body>
+</html>
