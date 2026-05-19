@@ -4,20 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Pendientes</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0f0f0f;
-    --card: #1a1a1a;
-    --card2: #222;
-    --flores: #4ade80;
-    --tienda: #60a5fa;
-    --done: #444;
-    --text: #f0f0f0;
+    --bg: #f7f5f0;
+    --white: #ffffff;
+    --flores: #16a34a;
+    --flores-light: #dcfce7;
+    --tienda: #2563eb;
+    --tienda-light: #dbeafe;
+    --done-text: #aaa;
+    --text: #1a1a1a;
     --muted: #888;
-    --border: #2a2a2a;
+    --border: #e8e4dc;
+    --shadow: 0 2px 12px rgba(0,0,0,0.06);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -27,16 +29,17 @@
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    padding-bottom: 40px;
+    padding-bottom: 60px;
   }
 
   header {
-    padding: 28px 20px 16px;
+    background: var(--white);
+    padding: 24px 20px 16px;
     position: sticky;
     top: 0;
-    background: var(--bg);
     z-index: 10;
     border-bottom: 1px solid var(--border);
+    box-shadow: 0 1px 8px rgba(0,0,0,0.04);
   }
 
   .header-top {
@@ -48,25 +51,27 @@
 
   h1 {
     font-family: 'Syne', sans-serif;
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 800;
+    color: var(--text);
     letter-spacing: -0.5px;
   }
 
   .refresh-btn {
-    background: var(--card2);
+    background: var(--bg);
     border: 1px solid var(--border);
     color: var(--muted);
     border-radius: 10px;
-    padding: 8px 12px;
+    padding: 7px 14px;
     font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 6px;
-    transition: all 0.2s;
+    gap: 5px;
+    transition: all 0.15s;
   }
-  .refresh-btn:active { transform: scale(0.95); background: #2a2a2a; }
+  .refresh-btn:active { transform: scale(0.95); }
 
   .progress-wrap {
     display: flex;
@@ -76,7 +81,7 @@
 
   .progress-bar {
     flex: 1;
-    height: 4px;
+    height: 5px;
     background: var(--border);
     border-radius: 99px;
     overflow: hidden;
@@ -86,7 +91,7 @@
     height: 100%;
     border-radius: 99px;
     background: linear-gradient(90deg, var(--flores), var(--tienda));
-    transition: width 0.6s ease;
+    transition: width 0.5s ease;
     width: 0%;
   }
 
@@ -100,41 +105,94 @@
   .tabs {
     display: flex;
     gap: 8px;
-    padding: 16px 20px 0;
+    padding: 14px 20px 0;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
   }
 
   .tab {
-    padding: 7px 16px;
+    padding: 8px 16px;
     border-radius: 99px;
     font-size: 13px;
     font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
     cursor: pointer;
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     background: transparent;
     color: var(--muted);
-    transition: all 0.2s;
+    transition: all 0.15s;
+    margin-bottom: 12px;
   }
 
-  .tab.active-flores { background: var(--flores); color: #000; border-color: var(--flores); }
-  .tab.active-tienda { background: var(--tienda); color: #000; border-color: var(--tienda); }
-  .tab.active-all { background: var(--card2); color: var(--text); border-color: #555; }
+  .tab.active-all { background: var(--text); color: white; border-color: var(--text); }
+  .tab.active-flores { background: var(--flores-light); color: var(--flores); border-color: var(--flores); }
+  .tab.active-tienda { background: var(--tienda-light); color: var(--tienda); border-color: var(--tienda); }
+
+  .filter-done {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    font-size: 13px;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .toggle {
+    width: 36px;
+    height: 20px;
+    background: var(--border);
+    border-radius: 99px;
+    position: relative;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+
+  .toggle.on { background: var(--flores); }
+
+  .toggle::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+
+  .toggle.on::after { transform: translateX(16px); }
 
   .content { padding: 16px 20px; }
 
   .section-label {
     font-family: 'Syne', sans-serif;
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 2px;
     text-transform: uppercase;
     color: var(--muted);
     margin: 20px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .section-label:first-child { margin-top: 4px; }
 
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
   .task-card {
-    background: var(--card);
+    background: var(--white);
     border: 1px solid var(--border);
     border-radius: 14px;
     padding: 14px 16px;
@@ -143,24 +201,25 @@
     align-items: flex-start;
     gap: 12px;
     cursor: pointer;
-    transition: all 0.2s;
-    animation: fadeIn 0.3s ease forwards;
+    transition: all 0.15s;
+    box-shadow: var(--shadow);
+    animation: fadeIn 0.25s ease forwards;
     opacity: 0;
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
+    from { opacity: 0; transform: translateY(5px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
-  .task-card:active { transform: scale(0.98); }
-  .task-card.done { background: #141414; border-color: #1e1e1e; }
+  .task-card:active { transform: scale(0.98); box-shadow: none; }
+  .task-card.done { background: #fafaf8; box-shadow: none; border-color: #eee; }
 
   .check {
     width: 22px;
     height: 22px;
     border-radius: 7px;
-    border: 1.5px solid #444;
+    border: 1.5px solid var(--border);
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -168,31 +227,32 @@
     font-size: 12px;
     transition: all 0.2s;
     margin-top: 1px;
+    background: white;
   }
 
   .task-card.flores .check { border-color: var(--flores); }
   .task-card.tienda .check { border-color: var(--tienda); }
-  .task-card.done .check { background: #333; border-color: #333; color: #666; }
+  .task-card.flores.done .check { background: var(--flores); border-color: var(--flores); color: white; }
+  .task-card.tienda.done .check { background: var(--tienda); border-color: var(--tienda); color: white; }
 
   .task-info { flex: 1; min-width: 0; }
 
   .task-name {
     font-size: 14px;
-    font-weight: 400;
-    line-height: 1.4;
+    line-height: 1.45;
     color: var(--text);
     transition: color 0.2s;
   }
 
   .task-card.done .task-name {
-    color: #444;
+    color: var(--done-text);
     text-decoration: line-through;
   }
 
   .task-meta {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     margin-top: 5px;
     flex-wrap: wrap;
   }
@@ -204,9 +264,9 @@
     font-weight: 500;
   }
 
-  .tag-flores { background: rgba(74,222,128,0.12); color: var(--flores); }
-  .tag-tienda { background: rgba(96,165,250,0.12); color: var(--tienda); }
-  .tag-date { background: rgba(255,200,100,0.1); color: #fbbf24; }
+  .tag-flores { background: var(--flores-light); color: var(--flores); }
+  .tag-tienda { background: var(--tienda-light); color: var(--tienda); }
+  .tag-date { background: #fef9c3; color: #a16207; }
 
   .empty {
     text-align: center;
@@ -214,8 +274,8 @@
     color: var(--muted);
   }
 
-  .empty-icon { font-size: 40px; margin-bottom: 12px; }
-  .empty-text { font-size: 15px; }
+  .empty-icon { font-size: 44px; margin-bottom: 12px; }
+  .empty-text { font-size: 15px; line-height: 1.5; }
 
   .loading {
     text-align: center;
@@ -241,7 +301,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: var(--card);
+    background: var(--white);
     border-top: 1px solid var(--border);
     padding: 10px 20px;
     font-size: 12px;
@@ -259,56 +319,37 @@
     flex-shrink: 0;
   }
 
-  .status-dot.loading { background: #fbbf24; animation: pulse 1s infinite; }
-  .status-dot.error { background: #f87171; }
-
+  .status-dot.loading { background: #f59e0b; animation: pulse 1s infinite; }
+  .status-dot.error { background: #ef4444; }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-  .filter-done {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 20px 0;
-    font-size: 13px;
-    color: var(--muted);
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .toggle {
-    width: 34px;
-    height: 20px;
-    background: var(--border);
+  .toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-80px);
+    background: var(--text);
+    color: white;
+    padding: 10px 20px;
     border-radius: 99px;
-    position: relative;
-    transition: background 0.2s;
+    font-size: 13px;
+    font-weight: 500;
+    transition: transform 0.3s ease;
+    z-index: 100;
+    white-space: nowrap;
   }
 
-  .toggle.on { background: var(--tienda); }
-
-  .toggle::after {
-    content: '';
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    background: white;
-    border-radius: 50%;
-    top: 3px;
-    left: 3px;
-    transition: transform 0.2s;
-  }
-
-  .toggle.on::after { transform: translateX(14px); }
+  .toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 
+<div class="toast" id="toast"></div>
+
 <header>
   <div class="header-top">
-    <h1>Pendientes</h1>
-    <button class="refresh-btn" onclick="loadTasks()">
-      ↻ Actualizar
-    </button>
+    <h1>📋 Pendientes</h1>
+    <button class="refresh-btn" onclick="loadTasks()">↻ Actualizar</button>
   </div>
   <div class="progress-wrap">
     <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
@@ -340,8 +381,7 @@
 </div>
 
 <script>
-const SHEET_ID = '1dl8vJlSpLBC5vsdSB48I58bgaV-1g2gNvnELzvO69pw';
-const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBbx4KUYDTBqYPqnfka8vpbOIlVWcniSPMvCCrXz8_RMIXXwTZKM15pNj5LrlQhGNDnA/exec';
 
 let tasks = [];
 let currentTab = 'all';
@@ -352,31 +392,62 @@ function setStatus(msg, type = 'ok') {
   document.getElementById('statusText').textContent = msg;
 }
 
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
 async function loadTasks() {
   setStatus('Actualizando...', 'loading');
   try {
-    const res = await fetch(API_URL + '&t=' + Date.now());
-    const text = await res.text();
-    const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1]);
-    const rows = json.table.rows;
-    tasks = rows.map(row => ({
-      id: row.c[0]?.v,
-      name: row.c[1]?.v || '',
-      place: row.c[2]?.v || '',
-      status: row.c[3]?.v || 'Pendiente',
-      date: row.c[4]?.v || '',
-      notes: row.c[5]?.v || ''
-    })).filter(t => t.name);
-    renderTasks();
-    const now = new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
-    setStatus(`Actualizado a las ${now}`, 'ok');
-  } catch (e) {
-    setStatus('Error al cargar — verifica que el Sheet es público', 'error');
+    const res = await fetch(SCRIPT_URL + '?action=getTasks&t=' + Date.now());
+    const data = await res.json();
+    if (data.ok) {
+      tasks = data.tasks.filter(t => t.name);
+      renderTasks();
+      const now = new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+      setStatus(`Actualizado · ${now}`, 'ok');
+    } else {
+      throw new Error(data.error);
+    }
+  } catch(e) {
+    setStatus('Error al cargar', 'error');
     document.getElementById('content').innerHTML = `
       <div class="empty">
         <div class="empty-icon">⚠️</div>
-        <div class="empty-text">No se pudo conectar al Sheet.<br>Toca "Actualizar" para reintentar.</div>
+        <div class="empty-text">No se pudo conectar.<br>Toca "Actualizar" para reintentar.</div>
       </div>`;
+  }
+}
+
+async function toggleTask(id) {
+  const task = tasks.find(t => t.id == id);
+  if (!task) return;
+
+  const prev = task.status;
+  task.status = prev === 'Completado' ? 'Pendiente' : 'Completado';
+  renderTasks();
+  setStatus('Guardando...', 'loading');
+
+  try {
+    const res = await fetch(SCRIPT_URL + '?action=toggleTask&id=' + id);
+    const data = await res.json();
+    if (data.ok) {
+      task.status = data.newStatus;
+      renderTasks();
+      showToast(data.newStatus === 'Completado' ? '✅ Tarea completada' : '↩️ Tarea reabierta');
+      setStatus('Guardado', 'ok');
+    } else {
+      task.status = prev;
+      renderTasks();
+      setStatus('Error al guardar', 'error');
+    }
+  } catch(e) {
+    task.status = prev;
+    renderTasks();
+    setStatus('Error al guardar', 'error');
   }
 }
 
@@ -415,36 +486,37 @@ function renderTasks() {
   const content = document.getElementById('content');
 
   if (!filtered.length) {
-    content.innerHTML = `<div class="empty"><div class="empty-icon">${showDone ? '🎉' : '✅'}</div><div class="empty-text">${showDone ? 'No hay tareas' : '¡Todo completado!'}</div></div>`;
+    content.innerHTML = `<div class="empty"><div class="empty-icon">${showDone ? '📭' : '🎉'}</div><div class="empty-text">${showDone ? 'No hay tareas aquí' : '¡Todo completado en esta sección!'}</div></div>`;
     return;
   }
 
   const sections = currentTab === 'all'
     ? [
-        { label: '📍 Local Las Flores', items: filtered.filter(t => t.place === 'Las Flores') },
-        { label: '🏪 La Tienda', items: filtered.filter(t => t.place === 'La Tienda') }
+        { label: '📍 Local Las Flores', key: 'flores', items: filtered.filter(t => t.place === 'Las Flores') },
+        { label: '🏪 La Tienda', key: 'tienda', items: filtered.filter(t => t.place === 'La Tienda') }
       ]
-    : [{ label: '', items: filtered }];
+    : [{ label: '', key: currentTab, items: filtered }];
 
   let html = '';
   sections.forEach(sec => {
     if (!sec.items.length) return;
-    if (sec.label) html += `<div class="section-label">${sec.label}</div>`;
+    if (sec.label) html += `<div class="section-label">${sec.label}<div class="section-line"></div></div>`;
     sec.items.forEach((t, i) => {
       const isFlores = t.place === 'Las Flores';
       const isDone = t.status === 'Completado';
-      const delay = i * 40;
+      const delay = i * 35;
+      const dateStr = t.date ? formatDate(t.date) : '';
       html += `
         <div class="task-card ${isFlores ? 'flores' : 'tienda'} ${isDone ? 'done' : ''}"
              style="animation-delay:${delay}ms"
-             onclick="handleTask(${t.id})">
+             onclick="toggleTask(${t.id})">
           <div class="check">${isDone ? '✓' : ''}</div>
           <div class="task-info">
             <div class="task-name">${t.name}</div>
             <div class="task-meta">
               ${currentTab === 'all' ? `<span class="tag ${isFlores ? 'tag-flores' : 'tag-tienda'}">${t.place}</span>` : ''}
-              ${t.date ? `<span class="tag tag-date">📅 ${formatDate(t.date)}</span>` : ''}
-              ${t.notes ? `<span style="font-size:11px;color:#666">${t.notes}</span>` : ''}
+              ${dateStr ? `<span class="tag tag-date">📅 ${dateStr}</span>` : ''}
+              ${t.notes ? `<span style="font-size:11px;color:#999;font-style:italic">${t.notes}</span>` : ''}
             </div>
           </div>
         </div>`;
@@ -458,15 +530,9 @@ function formatDate(d) {
   if (!d) return '';
   try {
     const date = new Date(d);
+    if (isNaN(date)) return d;
     return date.toLocaleDateString('es-PE', { day: 'numeric', month: 'short' });
   } catch { return d; }
-}
-
-function handleTask(id) {
-  const task = tasks.find(t => t.id === id);
-  if (!task) return;
-  const action = task.status === 'Completado' ? 'reabrir' : 'marcar como completada';
-  alert(`Para ${action} la tarea "${task.name}", díselo a Claude y él actualiza el Sheet. 😊`);
 }
 
 loadTasks();
