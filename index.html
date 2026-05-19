@@ -21,9 +21,9 @@
     --border: #e8e4dc;
     --shadow: 0 2px 12px rgba(0,0,0,0.06);
   }
-
+ 
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
+ 
   body {
     font-family: 'DM Sans', sans-serif;
     background: var(--bg);
@@ -31,7 +31,7 @@
     min-height: 100vh;
     padding-bottom: 60px;
   }
-
+ 
   header {
     background: var(--white);
     padding: 24px 20px 16px;
@@ -41,14 +41,14 @@
     border-bottom: 1px solid var(--border);
     box-shadow: 0 1px 8px rgba(0,0,0,0.04);
   }
-
+ 
   .header-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 14px;
   }
-
+ 
   h1 {
     font-family: 'Syne', sans-serif;
     font-size: 24px;
@@ -56,7 +56,7 @@
     color: var(--text);
     letter-spacing: -0.5px;
   }
-
+ 
   .refresh-btn {
     background: var(--bg);
     border: 1px solid var(--border);
@@ -72,13 +72,13 @@
     transition: all 0.15s;
   }
   .refresh-btn:active { transform: scale(0.95); }
-
+ 
   .progress-wrap {
     display: flex;
     align-items: center;
     gap: 10px;
   }
-
+ 
   .progress-bar {
     flex: 1;
     height: 5px;
@@ -86,7 +86,7 @@
     border-radius: 99px;
     overflow: hidden;
   }
-
+ 
   .progress-fill {
     height: 100%;
     border-radius: 99px;
@@ -94,14 +94,14 @@
     transition: width 0.5s ease;
     width: 0%;
   }
-
+ 
   .progress-text {
     font-size: 12px;
     color: var(--muted);
     white-space: nowrap;
     font-weight: 500;
   }
-
+ 
   .tabs {
     display: flex;
     gap: 8px;
@@ -109,7 +109,7 @@
     background: var(--white);
     border-bottom: 1px solid var(--border);
   }
-
+ 
   .tab {
     padding: 8px 16px;
     border-radius: 99px;
@@ -123,11 +123,11 @@
     transition: all 0.15s;
     margin-bottom: 12px;
   }
-
+ 
   .tab.active-all { background: var(--text); color: white; border-color: var(--text); }
   .tab.active-flores { background: var(--flores-light); color: var(--flores); border-color: var(--flores); }
   .tab.active-tienda { background: var(--tienda-light); color: var(--tienda); border-color: var(--tienda); }
-
+ 
   .filter-done {
     display: flex;
     align-items: center;
@@ -140,7 +140,7 @@
     background: var(--white);
     border-bottom: 1px solid var(--border);
   }
-
+ 
   .toggle {
     width: 36px;
     height: 20px;
@@ -150,9 +150,9 @@
     transition: background 0.2s;
     flex-shrink: 0;
   }
-
+ 
   .toggle.on { background: var(--flores); }
-
+ 
   .toggle::after {
     content: '';
     position: absolute;
@@ -165,11 +165,11 @@
     transition: transform 0.2s;
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   }
-
+ 
   .toggle.on::after { transform: translateX(16px); }
-
+ 
   .content { padding: 16px 20px; }
-
+ 
   .section-label {
     font-family: 'Syne', sans-serif;
     font-size: 11px;
@@ -182,15 +182,15 @@
     align-items: center;
     gap: 8px;
   }
-
+ 
   .section-label:first-child { margin-top: 4px; }
-
+ 
   .section-line {
     flex: 1;
     height: 1px;
     background: var(--border);
   }
-
+ 
   .task-card {
     background: var(--white);
     border: 1px solid var(--border);
@@ -206,15 +206,15 @@
     animation: fadeIn 0.25s ease forwards;
     opacity: 0;
   }
-
+ 
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(5px); }
     to { opacity: 1; transform: translateY(0); }
   }
-
+ 
   .task-card:active { transform: scale(0.98); box-shadow: none; }
   .task-card.done { background: #fafaf8; box-shadow: none; border-color: #eee; }
-
+ 
   .check {
     width: 22px;
     height: 22px;
@@ -229,26 +229,26 @@
     margin-top: 1px;
     background: white;
   }
-
+ 
   .task-card.flores .check { border-color: var(--flores); }
   .task-card.tienda .check { border-color: var(--tienda); }
   .task-card.flores.done .check { background: var(--flores); border-color: var(--flores); color: white; }
   .task-card.tienda.done .check { background: var(--tienda); border-color: var(--tienda); color: white; }
-
+ 
   .task-info { flex: 1; min-width: 0; }
-
+ 
   .task-name {
     font-size: 14px;
     line-height: 1.45;
     color: var(--text);
     transition: color 0.2s;
   }
-
+ 
   .task-card.done .task-name {
     color: var(--done-text);
     text-decoration: line-through;
   }
-
+ 
   .task-meta {
     display: flex;
     align-items: center;
@@ -256,34 +256,34 @@
     margin-top: 5px;
     flex-wrap: wrap;
   }
-
+ 
   .tag {
     font-size: 11px;
     padding: 2px 8px;
     border-radius: 99px;
     font-weight: 500;
   }
-
+ 
   .tag-flores { background: var(--flores-light); color: var(--flores); }
   .tag-tienda { background: var(--tienda-light); color: var(--tienda); }
   .tag-date { background: #fef9c3; color: #a16207; }
-
+ 
   .empty {
     text-align: center;
     padding: 60px 20px;
     color: var(--muted);
   }
-
+ 
   .empty-icon { font-size: 44px; margin-bottom: 12px; }
   .empty-text { font-size: 15px; line-height: 1.5; }
-
+ 
   .loading {
     text-align: center;
     padding: 60px 20px;
     color: var(--muted);
     font-size: 14px;
   }
-
+ 
   .spinner {
     width: 28px;
     height: 28px;
@@ -293,9 +293,9 @@
     animation: spin 0.8s linear infinite;
     margin: 0 auto 16px;
   }
-
+ 
   @keyframes spin { to { transform: rotate(360deg); } }
-
+ 
   .status-bar {
     position: fixed;
     bottom: 0;
@@ -310,7 +310,7 @@
     align-items: center;
     gap: 6px;
   }
-
+ 
   .status-dot {
     width: 7px;
     height: 7px;
@@ -318,11 +318,11 @@
     background: var(--flores);
     flex-shrink: 0;
   }
-
+ 
   .status-dot.loading { background: #f59e0b; animation: pulse 1s infinite; }
   .status-dot.error { background: #ef4444; }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-
+ 
   .toast {
     position: fixed;
     top: 20px;
@@ -338,14 +338,14 @@
     z-index: 100;
     white-space: nowrap;
   }
-
+ 
   .toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
-
+ 
 <div class="toast" id="toast"></div>
-
+ 
 <header>
   <div class="header-top">
     <h1>📋 Pendientes</h1>
@@ -356,49 +356,49 @@
     <span class="progress-text" id="progressText">—</span>
   </div>
 </header>
-
+ 
 <div class="tabs">
   <button class="tab active-all" onclick="setTab('all')" id="tab-all">Todo</button>
   <button class="tab" onclick="setTab('flores')" id="tab-flores">📍 Las Flores</button>
   <button class="tab" onclick="setTab('tienda')" id="tab-tienda">🏪 La Tienda</button>
 </div>
-
+ 
 <div class="filter-done" onclick="toggleDone()">
   <div class="toggle" id="toggleDone"></div>
   <span>Mostrar completadas</span>
 </div>
-
+ 
 <div class="content" id="content">
   <div class="loading">
     <div class="spinner"></div>
     Cargando tareas...
   </div>
 </div>
-
+ 
 <div class="status-bar">
   <div class="status-dot" id="statusDot"></div>
   <span id="statusText">Conectando...</span>
 </div>
-
+ 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBbx4KUYDTBqYPqnfka8vpbOIlVWcniSPMvCCrXz8_RMIXXwTZKM15pNj5LrlQhGNDnA/exec';
-
+ 
 let tasks = [];
 let currentTab = 'all';
 let showDone = false;
-
+ 
 function setStatus(msg, type = 'ok') {
   document.getElementById('statusDot').className = 'status-dot ' + (type === 'ok' ? '' : type);
   document.getElementById('statusText').textContent = msg;
 }
-
+ 
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2200);
 }
-
+ 
 async function loadTasks() {
   setStatus('Actualizando...', 'loading');
   try {
@@ -421,16 +421,16 @@ async function loadTasks() {
       </div>`;
   }
 }
-
+ 
 async function toggleTask(id) {
   const task = tasks.find(t => t.id == id);
   if (!task) return;
-
+ 
   const prev = task.status;
   task.status = prev === 'Completado' ? 'Pendiente' : 'Completado';
   renderTasks();
   setStatus('Guardando...', 'loading');
-
+ 
   try {
     const res = await fetch(SCRIPT_URL + '?action=toggleTask&id=' + id);
     const data = await res.json();
@@ -450,7 +450,7 @@ async function toggleTask(id) {
     setStatus('Error al guardar', 'error');
   }
 }
-
+ 
 function setTab(tab) {
   currentTab = tab;
   ['all','flores','tienda'].forEach(t => {
@@ -464,39 +464,39 @@ function setTab(tab) {
   });
   renderTasks();
 }
-
+ 
 function toggleDone() {
   showDone = !showDone;
   document.getElementById('toggleDone').classList.toggle('on', showDone);
   renderTasks();
 }
-
+ 
 function renderTasks() {
   const total = tasks.length;
   const done = tasks.filter(t => t.status === 'Completado').length;
   const pct = total ? Math.round((done / total) * 100) : 0;
   document.getElementById('progressFill').style.width = pct + '%';
   document.getElementById('progressText').textContent = `${done}/${total}`;
-
+ 
   let filtered = tasks;
   if (currentTab === 'flores') filtered = tasks.filter(t => t.place === 'Las Flores');
   if (currentTab === 'tienda') filtered = tasks.filter(t => t.place === 'La Tienda');
   if (!showDone) filtered = filtered.filter(t => t.status !== 'Completado');
-
+ 
   const content = document.getElementById('content');
-
+ 
   if (!filtered.length) {
     content.innerHTML = `<div class="empty"><div class="empty-icon">${showDone ? '📭' : '🎉'}</div><div class="empty-text">${showDone ? 'No hay tareas aquí' : '¡Todo completado en esta sección!'}</div></div>`;
     return;
   }
-
+ 
   const sections = currentTab === 'all'
     ? [
         { label: '📍 Local Las Flores', key: 'flores', items: filtered.filter(t => t.place === 'Las Flores') },
         { label: '🏪 La Tienda', key: 'tienda', items: filtered.filter(t => t.place === 'La Tienda') }
       ]
     : [{ label: '', key: currentTab, items: filtered }];
-
+ 
   let html = '';
   sections.forEach(sec => {
     if (!sec.items.length) return;
@@ -522,10 +522,10 @@ function renderTasks() {
         </div>`;
     });
   });
-
+ 
   content.innerHTML = html;
 }
-
+ 
 function formatDate(d) {
   if (!d) return '';
   try {
@@ -534,7 +534,7 @@ function formatDate(d) {
     return date.toLocaleDateString('es-PE', { day: 'numeric', month: 'short' });
   } catch { return d; }
 }
-
+ 
 loadTasks();
 setInterval(loadTasks, 60000);
 </script>
